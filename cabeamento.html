@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CaboTech — Soluções em Cabeamento</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c0f;
+    --surface: #11141a;
+    --card: #161b24;
+    --accent: #f5a623;
+    --accent2: #e8560a;
+    --text: #e8e8e0;
+    --muted: #6b7280;
+    --border: #1f2937;
+    --white: #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CURSOR */
+  #cursor {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.08s ease, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: difference;
+  }
+  #cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(245,166,35,0.4);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.18s ease;
+  }
+  body:hover #cursor { opacity: 1; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(10,12,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.12em;
+    color: var(--white);
+  }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: var(--accent2); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 3rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 70% 50%, rgba(245,166,35,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 90% 80%, rgba(232,86,10,0.04) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+  .hero-content { position: relative; z-index: 2; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(245,166,35,0.1);
+    border: 1px solid rgba(245,166,35,0.3);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.3)} }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  h1 .line-accent { color: var(--accent); display: block; }
+  h1 .line-outline {
+    -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+    color: transparent;
+    display: block;
+  }
+  .hero-desc {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .hero-actions { display: flex; gap: 1rem; animation: fadeUp 0.8s 0.3s ease both; }
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    padding: 0.9rem 2.2rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.4s;
+  }
+  .btn-primary:hover::after { left: 100%; }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
+  .btn-outline {
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.9rem 2.2rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* HERO VISUAL */
+  .hero-visual {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cable-diagram {
+    width: 100%;
+    max-width: 520px;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+  .hero-stats {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    border: 1px solid var(--border);
+    margin-top: 3rem;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+  .stat {
+    padding: 1.5rem;
+    background: var(--surface);
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0.2rem;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    padding: 1rem 0;
+  }
+  .marquee {
+    display: flex; gap: 3rem;
+    animation: scroll 20s linear infinite;
+    width: max-content;
+  }
+  .marquee-item {
+    display: flex; align-items: center; gap: 0.8rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .marquee-item span { color: var(--accent); font-size: 1.1rem; }
+  @keyframes scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* SECTION BASE */
+  section { padding: 6rem 3rem; }
+  .section-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    letter-spacing: 0.04em;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+  .section-desc {
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.8;
+    font-size: 0.95rem;
+  }
+
+  /* SERVIÇOS */
+  .services { background: var(--bg); }
+  .services-header { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: end; margin-bottom: 4rem; }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+  .service-card {
+    background: var(--card);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .service-card:hover { background: var(--surface); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-icon {
+    width: 48px; height: 48px;
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+  }
+  .service-num {
+    position: absolute;
+    top: 2rem; right: 2rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: rgba(255,255,255,0.04);
+    letter-spacing: 0.05em;
+    line-height: 1;
+  }
+  .service-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--white);
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.03em;
+  }
+  .service-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
+  .service-link {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    margin-top: 1.5rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    transition: gap 0.2s;
+  }
+  .service-link:hover { gap: 0.8rem; }
+
+  /* PROCESSO */
+  .process { background: var(--surface); }
+  .process-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .process-steps { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: grid; grid-template-columns: 48px 1fr; gap: 1.5rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    transition: padding-left 0.2s;
+  }
+  .step:hover { padding-left: 0.5rem; }
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    padding-top: 0.1rem;
+  }
+  .step-title { font-weight: 700; color: var(--white); margin-bottom: 0.4rem; }
+  .step-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
+
+  .process-img {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    min-height: 480px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .process-img-inner { width: 100%; padding: 2rem; }
+
+  /* CABO SVG ILLUSTRATION */
+  .cable-svg-wrap { position: relative; }
+
+  /* TIPOS DE CABO */
+  .cables { background: var(--bg); }
+  .cables-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  .cable-card {
+    border: 1px solid var(--border);
+    padding: 2rem;
+    background: var(--card);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .cable-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .cable-card-img {
+    width: 100%;
+    aspect-ratio: 1;
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cable-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+  .cable-spec { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+  .cable-badge {
+    display: inline-block;
+    background: rgba(245,166,35,0.15);
+    border: 1px solid rgba(245,166,35,0.3);
+    color: var(--accent);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    margin-bottom: 0.8rem;
+  }
+
+  /* CLIENTES / LOGOS */
+  .clients { background: var(--surface); text-align: center; }
+  .clients-title { font-size: 0.78rem; color: var(--muted); font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 2.5rem; }
+  .logos-row { display: flex; align-items: center; justify-content: center; gap: 3rem; flex-wrap: wrap; }
+  .logo-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    color: var(--border);
+    transition: color 0.2s;
+    filter: grayscale(1) opacity(0.3);
+  }
+  .logo-item:hover { color: var(--muted); filter: none; }
+
+  /* DEPOIMENTOS */
+  .testimonials { background: var(--bg); }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  .testimonial {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    position: relative;
+  }
+  .testimonial::before {
+    content: '"';
+    position: absolute;
+    top: 1rem; right: 1.5rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    color: rgba(245,166,35,0.08);
+    line-height: 1;
+  }
+  .testimonial-text { font-size: 0.9rem; color: var(--text); line-height: 1.8; margin-bottom: 1.5rem; }
+  .testimonial-author { display: flex; align-items: center; gap: 1rem; }
+  .author-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    color: var(--accent);
+  }
+  .author-name { font-weight: 700; font-size: 0.85rem; color: var(--white); }
+  .author-role { font-size: 0.75rem; color: var(--muted); margin-top: 0.1rem; }
+
+  /* CTA BAND */
+  .cta-band {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    padding: 5rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-band::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .cta-band-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    letter-spacing: 0.04em;
+    color: #000;
+    position: relative; z-index: 1;
+    margin-bottom: 1rem;
+  }
+  .cta-band-desc { color: rgba(0,0,0,0.6); font-size: 1rem; margin-bottom: 2rem; position: relative; z-index: 1; }
+  .btn-dark {
+    background: #000;
+    color: var(--accent);
+    padding: 1rem 2.5rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    position: relative; z-index: 1;
+    transition: all 0.2s;
+  }
+  .btn-dark:hover { background: var(--accent2); color: #000; transform: scale(1.03); }
+
+  /* CONTACT */
+  .contact { background: var(--surface); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .contact-info { }
+  .contact-detail {
+    display: flex; align-items: flex-start; gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .contact-icon { color: var(--accent); flex-shrink: 0; margin-top: 0.1rem; }
+  .contact-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+  .contact-value { color: var(--text); font-size: 0.95rem; }
+  .form-group { margin-bottom: 1.2rem; }
+  label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 0.5rem; }
+  input, textarea, select {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.85rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    cursor: none;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+  textarea { resize: vertical; min-height: 120px; }
+  select option { background: var(--card); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 4rem 3rem 2rem;
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-brand .logo { font-size: 1.5rem; }
+  .footer-desc { color: var(--muted); font-size: 0.875rem; line-height: 1.7; margin-top: 1rem; max-width: 280px; }
+  .footer-heading { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text); margin-bottom: 1.2rem; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.875rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--accent); }
+  .footer-bottom { border-top: 1px solid var(--border); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy { font-size: 0.78rem; color: var(--muted); }
+  .social-links { display: flex; gap: 1rem; }
+  .social-link {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted);
+    text-decoration: none;
+    transition: all 0.2s;
+    font-size: 0.85rem;
+  }
+  .social-link:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* MOBILE */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; }
+    .hero-visual { display: none; }
+    .services-header { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    .process-grid { grid-template-columns: 1fr; }
+    .cables-grid { grid-template-columns: 1fr 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    section { padding: 4rem 1.5rem; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Cabo<span>Tech</span></div>
+  <ul class="nav-links">
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#processo">Processo</a></li>
+    <li><a href="#cabos">Tipos de Cabo</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <button class="nav-cta">Solicitar Orçamento</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Especialistas em Infraestrutura</div>
+    <h1>
+      <span>Cabeamento</span>
+      <span class="line-accent">Estruturado</span>
+      <span class="line-outline">de Alta Performance</span>
+    </h1>
+    <p class="hero-desc">
+      Soluções completas em cabeamento de dados, voz, fibra óptica e elétrico. Projetamos, instalamos e certificamos redes para empresas de todos os portes.
+    </p>
+    <div class="hero-actions">
+      <a href="#contato" class="btn-primary">Solicitar Visita Técnica</a>
+      <a href="#servicos" class="btn-outline">Ver Serviços</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div>
+      <!-- SVG DIAGRAMA DE CABEAMENTO -->
+      <svg class="cable-diagram" viewBox="0 0 500 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Background glow -->
+        <ellipse cx="250" cy="210" rx="200" ry="160" fill="rgba(245,166,35,0.04)"/>
+        
+        <!-- PATCH PANEL -->
+        <rect x="160" y="30" width="180" height="55" rx="4" fill="#161b24" stroke="#f5a623" stroke-width="1.5"/>
+        <text x="250" y="52" text-anchor="middle" font-family="Bebas Neue" font-size="12" fill="#f5a623" letter-spacing="2">PATCH PANEL</text>
+        <!-- Ports -->
+        <g fill="#f5a623" opacity="0.7">
+          <rect x="175" y="60" width="8" height="8" rx="1"/>
+          <rect x="190" y="60" width="8" height="8" rx="1"/>
+          <rect x="205" y="60" width="8" height="8" rx="1"/>
+          <rect x="220" y="60" width="8" height="8" rx="1"/>
+          <rect x="235" y="60" width="8" height="8" rx="1"/>
+          <rect x="250" y="60" width="8" height="8" rx="1"/>
+          <rect x="265" y="60" width="8" height="8" rx="1"/>
+          <rect x="280" y="60" width="8" height="8" rx="1"/>
+          <rect x="295" y="60" width="8" height="8" rx="1"/>
+          <rect x="310" y="60" width="8" height="8" rx="1"/>
+        </g>
+        
+        <!-- SWITCH -->
+        <rect x="150" y="125" width="200" height="55" rx="4" fill="#161b24" stroke="#e8560a" stroke-width="1.5"/>
+        <text x="250" y="147" text-anchor="middle" font-family="Bebas Neue" font-size="12" fill="#e8560a" letter-spacing="2">SWITCH 24P</text>
+        <g fill="#e8560a" opacity="0.6">
+          <rect x="165" y="155" width="6" height="6" rx="1"/><rect x="178" y="155" width="6" height="6" rx="1"/>
+          <rect x="191" y="155" width="6" height="6" rx="1"/><rect x="204" y="155" width="6" height="6" rx="1"/>
+          <rect x="217" y="155" width="6" height="6" rx="1"/><rect x="230" y="155" width="6" height="6" rx="1"/>
+          <rect x="243" y="155" width="6" height="6" rx="1"/><rect x="256" y="155" width="6" height="6" rx="1"/>
+          <rect x="269" y="155" width="6" height="6" rx="1"/><rect x="282" y="155" width="6" height="6" rx="1"/>
+          <rect x="295" y="155" width="6" height="6" rx="1"/><rect x="308" y="155" width="6" height="6" rx="1"/>
+        </g>
+
+        <!-- Cabos Patch Panel → Switch -->
+        <path d="M 200 85 Q 200 107 200 125" stroke="#f5a623" stroke-width="1.5" stroke-dasharray="4 2" opacity="0.5"/>
+        <path d="M 220 85 Q 220 107 220 125" stroke="#f5a623" stroke-width="1.5" stroke-dasharray="4 2" opacity="0.5"/>
+        <path d="M 250 85 Q 250 107 250 125" stroke="#f5a623" stroke-width="1.5" stroke-dasharray="4 2" opacity="0.5"/>
+        <path d="M 280 85 Q 280 107 280 125" stroke="#f5a623" stroke-width="1.5" stroke-dasharray="4 2" opacity="0.5"/>
+        <path d="M 300 85 Q 300 107 300 125" stroke="#f5a623" stroke-width="1.5" stroke-dasharray="4 2" opacity="0.5"/>
+
+        <!-- WORKSTATIONS -->
+        <!-- WS 1 -->
+        <rect x="30" y="260" width="90" height="60" rx="4" fill="#161b24" stroke="#1f2937" stroke-width="1"/>
+        <rect x="40" y="268" width="70" height="40" rx="2" fill="#0a0c0f"/>
+        <rect x="55" y="272" width="40" height="28" rx="1" fill="#0d1117"/>
+        <line x1="55" y1="288" x2="95" y2="288" stroke="#f5a623" stroke-width="0.5" opacity="0.3"/>
+        <line x1="55" y1="294" x2="80" y2="294" stroke="#f5a623" stroke-width="0.5" opacity="0.2"/>
+        <text x="75" y="340" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6b7280">Estação 01</text>
+
+        <!-- WS 2 -->
+        <rect x="200" y="260" width="90" height="60" rx="4" fill="#161b24" stroke="#1f2937" stroke-width="1"/>
+        <rect x="210" y="268" width="70" height="40" rx="2" fill="#0a0c0f"/>
+        <rect x="225" y="272" width="40" height="28" rx="1" fill="#0d1117"/>
+        <line x1="225" y1="288" x2="265" y2="288" stroke="#f5a623" stroke-width="0.5" opacity="0.3"/>
+        <line x1="225" y1="294" x2="250" y2="294" stroke="#f5a623" stroke-width="0.5" opacity="0.2"/>
+        <text x="245" y="340" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6b7280">Estação 02</text>
+
+        <!-- WS 3 -->
+        <rect x="380" y="260" width="90" height="60" rx="4" fill="#161b24" stroke="#1f2937" stroke-width="1"/>
+        <rect x="390" y="268" width="70" height="40" rx="2" fill="#0a0c0f"/>
+        <rect x="405" y="272" width="40" height="28" rx="1" fill="#0d1117"/>
+        <line x1="405" y1="288" x2="445" y2="288" stroke="#f5a623" stroke-width="0.5" opacity="0.3"/>
+        <line x1="405" y1="294" x2="430" y2="294" stroke="#f5a623" stroke-width="0.5" opacity="0.2"/>
+        <text x="425" y="340" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6b7280">Estação 03</text>
+
+        <!-- Server -->
+        <rect x="200" y="370" width="100" height="40" rx="3" fill="#161b24" stroke="#f5a623" stroke-width="1"/>
+        <rect x="210" y="378" width="12" height="24" rx="1" fill="#0a0c0f"/>
+        <rect x="230" y="378" width="12" height="24" rx="1" fill="#0a0c0f"/>
+        <circle cx="320" cy="390" r="4" fill="#f5a623" opacity="0.6"/>
+        <text x="250" y="420" text-anchor="middle" font-family="Bebas Neue" font-size="10" fill="#f5a623" letter-spacing="1.5" opacity="0.7">SERVIDOR</text>
+
+        <!-- Cabos Switch → WS -->
+        <path d="M 200 180 Q 140 200 75 260" stroke="#e8560a" stroke-width="1.5" opacity="0.6"/>
+        <path d="M 250 180 Q 250 220 245 260" stroke="#e8560a" stroke-width="1.5" opacity="0.6"/>
+        <path d="M 300 180 Q 360 220 425 260" stroke="#e8560a" stroke-width="1.5" opacity="0.6"/>
+        <path d="M 250 180 Q 250 240 250 370" stroke="#f5a623" stroke-width="1.5" stroke-dasharray="6 3" opacity="0.4"/>
+        
+        <!-- Labels -->
+        <text x="105" y="218" font-family="DM Sans" font-size="8" fill="#6b7280">Cat6A</text>
+        <text x="254" y="228" font-family="DM Sans" font-size="8" fill="#6b7280">Cat6A</text>
+        <text x="348" y="218" font-family="DM Sans" font-size="8" fill="#6b7280">Cat6A</text>
+        <text x="260" y="310" font-family="DM Sans" font-size="8" fill="#6b7280" opacity="0.5">Fibra</text>
+
+        <!-- Connector dots -->
+        <circle cx="200" cy="85" r="3" fill="#f5a623"/>
+        <circle cx="250" cy="85" r="3" fill="#f5a623"/>
+        <circle cx="300" cy="85" r="3" fill="#f5a623"/>
+        <circle cx="200" cy="125" r="3" fill="#e8560a"/>
+        <circle cx="250" cy="125" r="3" fill="#e8560a"/>
+        <circle cx="300" cy="125" r="3" fill="#e8560a"/>
+        <circle cx="75" cy="260" r="3" fill="#e8560a"/>
+        <circle cx="245" cy="260" r="3" fill="#e8560a"/>
+        <circle cx="425" cy="260" r="3" fill="#e8560a"/>
+      </svg>
+
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">+500</div><div class="stat-label">Projetos Entregues</div></div>
+        <div class="stat"><div class="stat-num">15+</div><div class="stat-label">Anos de Experiência</div></div>
+        <div class="stat"><div class="stat-num">99%</div><div class="stat-label">Aprovação nos Testes</div></div>
+        <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Suporte Técnico</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee">
+    <div class="marquee-item"><span>◈</span> Cat5e / Cat6 / Cat6A</div>
+    <div class="marquee-item"><span>◈</span> Fibra Óptica Monomodo</div>
+    <div class="marquee-item"><span>◈</span> Fibra Multimodo</div>
+    <div class="marquee-item"><span>◈</span> Certificação Fluke</div>
+    <div class="marquee-item"><span>◈</span> ANSI/TIA 568</div>
+    <div class="marquee-item"><span>◈</span> Norma ABNT NBR 14565</div>
+    <div class="marquee-item"><span>◈</span> Rack Montagem</div>
+    <div class="marquee-item"><span>◈</span> Organização de DG</div>
+    <div class="marquee-item"><span>◈</span> Cat5e / Cat6 / Cat6A</div>
+    <div class="marquee-item"><span>◈</span> Fibra Óptica Monomodo</div>
+    <div class="marquee-item"><span>◈</span> Fibra Multimodo</div>
+    <div class="marquee-item"><span>◈</span> Certificação Fluke</div>
+    <div class="marquee-item"><span>◈</span> ANSI/TIA 568</div>
+    <div class="marquee-item"><span>◈</span> Norma ABNT NBR 14565</div>
+    <div class="marquee-item"><span>◈</span> Rack Montagem</div>
+    <div class="marquee-item"><span>◈</span> Organização de DG</div>
+  </div>
+</div>
+
+<!-- SERVIÇOS -->
+<section id="servicos" class="services">
+  <div class="services-header">
+    <div>
+      <div class="section-tag">O que fazemos</div>
+      <h2 class="section-title">Serviços Especializados</h2>
+    </div>
+    <p class="section-desc">Do projeto executivo à certificação final, cobrimos todas as etapas da infraestrutura de rede com precisão e conformidade às normas.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-num">01</div>
+      <svg class="service-icon" viewBox="0 0 48 48" fill="none">
+        <rect x="6" y="14" width="36" height="20" rx="2" stroke="currentColor" stroke-width="2"/>
+        <circle cx="12" cy="24" r="2" fill="currentColor"/>
+        <circle cx="20" cy="24" r="2" fill="currentColor"/>
+        <circle cx="28" cy="24" r="2" fill="currentColor"/>
+        <circle cx="36" cy="24" r="2" fill="currentColor"/>
+        <line x1="24" y1="34" x2="24" y2="40" stroke="currentColor" stroke-width="2"/>
+        <line x1="16" y1="40" x2="32" y2="40" stroke="currentColor" stroke-width="2"/>
+      </svg>
+      <div class="service-title">Cabeamento Estruturado</div>
+      <p class="service-desc">Instalação de cabos Cat5e, Cat6, Cat6A e Cat7 com passagem por eletrocalha, eletroduto e piso elevado. Conformidade total com normas ABNT.</p>
+      <a href="#" class="service-link">Saiba mais →</a>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02</div>
+      <svg class="service-icon" viewBox="0 0 48 48" fill="none">
+        <path d="M8 24 Q12 8 24 8 Q36 8 40 24 Q36 40 24 40 Q12 40 8 24Z" stroke="currentColor" stroke-width="2"/>
+        <circle cx="24" cy="24" r="4" fill="currentColor"/>
+        <line x1="24" y1="8" x2="24" y2="40" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/>
+        <line x1="8" y1="24" x2="40" y2="24" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/>
+      </svg>
+      <div class="service-title">Fibra Óptica</div>
+      <p class="service-desc">Lançamento e fusão de fibra óptica monomodo e multimodo para backbone de rede, links metropolitanos e conexões de alta velocidade.</p>
+      <a href="#" class="service-link">Saiba mais →</a>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03</div>
+      <svg class="service-icon" viewBox="0 0 48 48" fill="none">
+        <rect x="10" y="8" width="28" height="36" rx="2" stroke="currentColor" stroke-width="2"/>
+        <rect x="14" y="14" width="20" height="4" rx="1" fill="currentColor" opacity="0.5"/>
+        <rect x="14" y="22" width="20" height="4" rx="1" fill="currentColor" opacity="0.5"/>
+        <rect x="14" y="30" width="14" height="4" rx="1" fill="currentColor" opacity="0.5"/>
+        <circle cx="34" cy="12" r="3" fill="currentColor" opacity="0.8"/>
+      </svg>
+      <div class="service-title">Projeto Executivo</div>
+      <p class="service-desc">Elaboração de projetos técnicos detalhados com planta baixa, memorial descritivo, lista de materiais e diagrama de rede.</p>
+      <a href="#" class="service-link">Saiba mais →</a>
+    </div>
+    <div class="service-card">
+      <div class="service-num">04</div>
+      <svg class="service-icon" viewBox="0 0 48 48" fill="none">
+        <path d="M24 6L28 16H40L30 23L34 34L24 27L14 34L18 23L8 16H20L24 6Z" stroke="currentColor" stroke-width="2" fill="none"/>
+      </svg>
+      <div class="service-title">Certificação e Testes</div>
+      <p class="service-desc">Certificação de links com equipamentos Fluke Networks. Relatórios completos de desempenho garantindo conformidade com padrão IEEE.</p>
+      <a href="#" class="service-link">Saiba mais →</a>
+    </div>
+    <div class="service-card">
+      <div class="service-num">05</div>
+      <svg class="service-icon" viewBox="0 0 48 48" fill="none">
+        <rect x="14" y="6" width="20" height="36" rx="2" stroke="currentColor" stroke-width="2"/>
+        <line x1="14" y1="16" x2="34" y2="16" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="14" y1="26" x2="34" y2="26" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="20" cy="11" r="1.5" fill="currentColor"/>
+        <circle cx="26" cy="21" r="1.5" fill="currentColor"/>
+        <circle cx="28" cy="32" r="1.5" fill="currentColor"/>
+      </svg>
+      <div class="service-title">Organização de DG e Rack</div>
+      <p class="service-desc">Identificação, organização e reorganização de distribuidor geral, patch panels e racks, com documentação completa da infraestrutura.</p>
+      <a href="#" class="service-link">Saiba mais →</a>
+    </div>
+    <div class="service-card">
+      <div class="service-num">06</div>
+      <svg class="service-icon" viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="16" stroke="currentColor" stroke-width="2"/>
+        <path d="M18 24L22 28L30 20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M24 8V12M24 36V40M8 24H12M36 24H40" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+      </svg>
+      <div class="service-title">Manutenção e Suporte</div>
+      <p class="service-desc">Manutenção preventiva e corretiva de toda infraestrutura de cabeamento, com contrato de SLA e atendimento prioritário.</p>
+      <a href="#" class="service-link">Saiba mais →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESSO -->
+<section id="processo" class="process">
+  <div class="process-grid">
+    <div>
+      <div class="section-tag">Como trabalhamos</div>
+      <h2 class="section-title">Processo de Execução</h2>
+      <p class="section-desc" style="margin-bottom: 2.5rem;">Cada projeto segue um fluxo rigoroso para garantir qualidade, prazo e conformidade técnica.</p>
+      <div class="process-steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div>
+            <div class="step-title">Levantamento e Diagnóstico</div>
+            <p class="step-desc">Visita técnica gratuita para mapear o ambiente, identificar necessidades e avaliar infraestrutura existente.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div>
+            <div class="step-title">Projeto e Proposta Técnica</div>
+            <p class="step-desc">Elaboração do projeto executivo com planta baixa, especificação de materiais e cronograma de execução.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div>
+            <div class="step-title">Instalação e Infraestrutura</div>
+            <p class="step-desc">Passagem de cabos, instalação de eletrocalhas, tomadas, patch panels e organização do rack com equipe especializada.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div>
+            <div class="step-title">Certificação e Entrega</div>
+            <p class="step-desc">Testes em 100% dos pontos com emissão de relatório Fluke. Entrega com documentação técnica completa.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="process-img">
+      <div class="process-img-inner">
+        <!-- Rack SVG -->
+        <svg viewBox="0 0 280 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="10" width="240" height="380" rx="4" fill="#0a0c0f" stroke="#1f2937" stroke-width="2"/>
+          <rect x="30" y="20" width="220" height="360" rx="2" fill="#11141a"/>
+          
+          <!-- Rack units -->
+          <g>
+            <!-- 1U patch panel -->
+            <rect x="35" y="28" width="210" height="22" rx="2" fill="#161b24" stroke="#f5a623" stroke-width="1"/>
+            <text x="45" y="43" font-family="Bebas Neue" font-size="9" fill="#f5a623" letter-spacing="1">PATCH PANEL — 24P</text>
+            <g fill="#f5a623" opacity="0.7">
+              <rect x="145" y="32" width="5" height="5" rx="0.5"/><rect x="155" y="32" width="5" height="5" rx="0.5"/>
+              <rect x="165" y="32" width="5" height="5" rx="0.5"/><rect x="175" y="32" width="5" height="5" rx="0.5"/>
+              <rect x="185" y="32" width="5" height="5" rx="0.5"/><rect x="195" y="32" width="5" height="5" rx="0.5"/>
+              <rect x="205" y="32" width="5" height="5" rx="0.5"/><rect x="215" y="32" width="5" height="5" rx="0.5"/>
+              <rect x="225" y="32" width="5" height="5" rx="0.5"/><rect x="235" y="32" width="5" height="5" rx="0.5"/>
+            </g>
+
+            <!-- Cables organizer -->
+            <rect x="35" y="54" width="210" height="10" rx="1" fill="#1f2937"/>
+            <!-- Cable chaos -->
+            <path d="M 60 64 Q 80 80 100 90 Q 120 100 140 90 Q 160 80 180 90 Q 200 100 220 85" stroke="#f5a623" stroke-width="1.5" opacity="0.4"/>
+            <path d="M 65 64 Q 90 82 110 92 Q 130 102 150 95" stroke="#e8560a" stroke-width="1.5" opacity="0.3"/>
+            <path d="M 70 64 Q 100 78 130 85 Q 160 92 190 82 Q 210 76 230 85" stroke="#6b7280" stroke-width="1" opacity="0.5"/>
+
+            <!-- 2U Switch -->
+            <rect x="35" y="110" width="210" height="38" rx="2" fill="#161b24" stroke="#e8560a" stroke-width="1"/>
+            <text x="45" y="127" font-family="Bebas Neue" font-size="9" fill="#e8560a" letter-spacing="1">SWITCH CORE 48P</text>
+            <g fill="#e8560a" opacity="0.6">
+              <rect x="45" y="132" width="4" height="4" rx="0.5"/><rect x="53" y="132" width="4" height="4" rx="0.5"/>
+              <rect x="61" y="132" width="4" height="4" rx="0.5"/><rect x="69" y="132" width="4" height="4" rx="0.5"/>
+              <rect x="77" y="132" width="4" height="4" rx="0.5"/><rect x="85" y="132" width="4" height="4" rx="0.5"/>
+              <rect x="93" y="132" width="4" height="4" rx="0.5"/><rect x="101" y="132" width="4" height="4" rx="0.5"/>
+              <rect x="109" y="132" width="4" height="4" rx="0.5"/><rect x="117" y="132" width="4" height="4" rx="0.5"/>
+              <rect x="125" y="132" width="4" height="4" rx="0.5"/><rect x="133" y="132" width="4" height="4" rx="0.5"/>
+            </g>
+            <circle cx="230" cy="132" r="3" fill="#00ff88" opacity="0.8"/>
+            <circle cx="222" cy="132" r="3" fill="#f5a623" opacity="0.6"/>
+
+            <!-- Blank panels -->
+            <rect x="35" y="152" width="210" height="12" rx="1" fill="#0d1117" stroke="#1a1a2e" stroke-width="1"/>
+            <rect x="35" y="168" width="210" height="12" rx="1" fill="#0d1117" stroke="#1a1a2e" stroke-width="1"/>
+
+            <!-- Router/Firewall -->
+            <rect x="35" y="184" width="210" height="28" rx="2" fill="#161b24" stroke="#6b7280" stroke-width="1"/>
+            <text x="45" y="200" font-family="Bebas Neue" font-size="9" fill="#6b7280" letter-spacing="1">FIREWALL / ROTEADOR</text>
+            <circle cx="228" cy="196" r="3" fill="#f5a623" opacity="0.7"/>
+            <circle cx="218" cy="196" r="3" fill="#e8560a" opacity="0.5"/>
+
+            <!-- Patch panel 2 -->
+            <rect x="35" y="216" width="210" height="22" rx="2" fill="#161b24" stroke="#f5a623" stroke-width="1"/>
+            <text x="45" y="231" font-family="Bebas Neue" font-size="9" fill="#f5a623" letter-spacing="1">PATCH PANEL — 24P</text>
+
+            <!-- Cable organizer 2 -->
+            <rect x="35" y="242" width="210" height="10" rx="1" fill="#1f2937"/>
+
+            <!-- UPS/Nobreak -->
+            <rect x="35" y="256" width="210" height="48" rx="2" fill="#161b24" stroke="#6b7280" stroke-width="1"/>
+            <text x="45" y="276" font-family="Bebas Neue" font-size="9" fill="#6b7280" letter-spacing="1">NOBREAK 1500VA</text>
+            <rect x="45" y="284" width="80" height="12" rx="2" fill="#0a0c0f" stroke="#1f2937"/>
+            <text x="85" y="293" text-anchor="middle" font-family="DM Sans" font-size="7" fill="#f5a623">CARGA 72%</text>
+            <rect x="45" y="284" width="57" height="12" rx="2" fill="rgba(245,166,35,0.2)"/>
+
+            <!-- Blanks -->
+            <rect x="35" y="308" width="210" height="12" rx="1" fill="#0d1117" stroke="#1a1a2e"/>
+            <rect x="35" y="324" width="210" height="12" rx="1" fill="#0d1117" stroke="#1a1a2e"/>
+            <rect x="35" y="340" width="210" height="12" rx="1" fill="#0d1117" stroke="#1a1a2e"/>
+            <rect x="35" y="356" width="210" height="12" rx="1" fill="#0d1117" stroke="#1a1a2e"/>
+          </g>
+
+          <!-- Rack rails -->
+          <rect x="20" y="10" width="14" height="380" rx="0" fill="#161b24" stroke="#2a2a3a" stroke-width="1"/>
+          <rect x="246" y="10" width="14" height="380" rx="0" fill="#161b24" stroke="#2a2a3a" stroke-width="1"/>
+          
+          <!-- Rail holes -->
+          <g fill="#0a0c0f" opacity="0.6">
+            <rect x="23" y="30" width="8" height="4" rx="1"/>
+            <rect x="23" y="38" width="8" height="4" rx="1"/>
+            <rect x="23" y="54" width="8" height="4" rx="1"/>
+            <rect x="23" y="62" width="8" height="4" rx="1"/>
+            <rect x="23" y="78" width="8" height="4" rx="1"/>
+            <rect x="23" y="110" width="8" height="4" rx="1"/>
+            <rect x="23" y="130" width="8" height="4" rx="1"/>
+          </g>
+
+          <!-- Label -->
+          <text x="140" y="390" text-anchor="middle" font-family="Bebas Neue" font-size="10" fill="#6b7280" letter-spacing="2" opacity="0.6">RACK 24U — DG PRINCIPAL</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIPOS DE CABO -->
+<section id="cabos" class="cables">
+  <div class="section-tag">Infraestrutura</div>
+  <h2 class="section-title">Tipos de Cabeamento</h2>
+  <p class="section-desc">Trabalhamos com todos os padrões de cabeamento estruturado, sempre especificando a solução mais adequada para cada projeto.</p>
+  <div class="cables-grid">
+    <div class="cable-card">
+      <div class="cable-card-img">
+        <svg viewBox="0 0 120 120" fill="none">
+          <circle cx="60" cy="60" r="45" stroke="#1f2937" stroke-width="1"/>
+          <circle cx="60" cy="60" r="30" stroke="#f5a623" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+          <!-- Cable cross section -->
+          <circle cx="60" cy="60" r="18" fill="#161b24" stroke="#f5a623" stroke-width="2"/>
+          <circle cx="53" cy="54" r="4" fill="#e8560a" opacity="0.8"/>
+          <circle cx="67" cy="54" r="4" fill="#f5a623" opacity="0.8"/>
+          <circle cx="53" cy="66" r="4" fill="#6b7280" opacity="0.6"/>
+          <circle cx="67" cy="66" r="4" fill="#e8560a" opacity="0.5"/>
+          <circle cx="60" cy="60" r="2" fill="#f5a623"/>
+          <!-- Twisted pairs -->
+          <path d="M 20 40 Q 30 20 40 40 Q 50 60 60 40" stroke="#f5a623" stroke-width="1.5" opacity="0.3"/>
+          <path d="M 80 40 Q 90 20 100 40" stroke="#e8560a" stroke-width="1.5" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="cable-badge">Mais Popular</div>
+      <div class="cable-name">Cat6A</div>
+      <p class="cable-spec">10 Gbps · 500 MHz · Blindado · Ideal para redes corporativas modernas e data centers. Suporta PoE++.</p>
+    </div>
+    <div class="cable-card">
+      <div class="cable-card-img">
+        <svg viewBox="0 0 120 120" fill="none">
+          <!-- Fiber core -->
+          <circle cx="60" cy="60" r="45" stroke="#1f2937" stroke-width="1"/>
+          <circle cx="60" cy="60" r="25" fill="#0a0c0f" stroke="#6b7280" stroke-width="2"/>
+          <circle cx="60" cy="60" r="10" fill="#0a0c0f" stroke="#f5a623" stroke-width="2"/>
+          <circle cx="60" cy="60" r="4" fill="#f5a623" opacity="0.9"/>
+          <!-- Light rays -->
+          <path d="M 15 30 Q 38 45 60 60" stroke="#f5a623" stroke-width="1.5" opacity="0.6"/>
+          <path d="M 105 30 Q 82 45 60 60" stroke="#f5a623" stroke-width="1.5" opacity="0.6"/>
+          <path d="M 15 90 Q 38 75 60 60" stroke="#e8560a" stroke-width="1" opacity="0.4"/>
+          <path d="M 105 90 Q 82 75 60 60" stroke="#e8560a" stroke-width="1" opacity="0.4"/>
+          <circle cx="60" cy="60" r="55" stroke="#f5a623" stroke-width="0.5" stroke-dasharray="2 8" opacity="0.2"/>
+        </svg>
+      </div>
+      <div class="cable-badge">Alta Velocidade</div>
+      <div class="cable-name">Fibra Óptica</div>
+      <p class="cable-spec">Até 100 Gbps · Monomodo ou Multimodo · Ideal para backbone, links de longa distância e data centers.</p>
+    </div>
+    <div class="cable-card">
+      <div class="cable-card-img">
+        <svg viewBox="0 0 120 120" fill="none">
+          <circle cx="60" cy="60" r="45" stroke="#1f2937" stroke-width="1"/>
+          <circle cx="60" cy="60" r="18" fill="#161b24" stroke="#6b7280" stroke-width="2"/>
+          <circle cx="52" cy="55" r="3.5" fill="#e8560a" opacity="0.7"/>
+          <circle cx="68" cy="55" r="3.5" fill="#f5a623" opacity="0.7"/>
+          <circle cx="52" cy="65" r="3.5" fill="#6b7280" opacity="0.5"/>
+          <circle cx="68" cy="65" r="3.5" fill="#e8560a" opacity="0.4"/>
+          <path d="M 20 50 Q 35 35 50 50 Q 65 65 80 50 Q 95 35 100 50" stroke="#6b7280" stroke-width="1.5" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="cable-badge">Custo-Benefício</div>
+      <div class="cable-name">Cat6</div>
+      <p class="cable-spec">1 Gbps · 250 MHz · UTP ou F/UTP · Excelente para escritórios, redes prediais e aplicações padrão.</p>
+    </div>
+    <div class="cable-card">
+      <div class="cable-card-img">
+        <svg viewBox="0 0 120 120" fill="none">
+          <circle cx="60" cy="60" r="45" stroke="#1f2937" stroke-width="1"/>
+          <!-- Coaxial -->
+          <circle cx="60" cy="60" r="20" fill="none" stroke="#6b7280" stroke-width="5"/>
+          <circle cx="60" cy="60" r="8" fill="none" stroke="#f5a623" stroke-width="2"/>
+          <circle cx="60" cy="60" r="3" fill="#f5a623"/>
+          <circle cx="60" cy="60" r="32" fill="none" stroke="#1f2937" stroke-width="3"/>
+          <path d="M 28 60 A 32 32 0 0 1 92 60" stroke="#6b7280" stroke-width="1" stroke-dasharray="3 4" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="cable-badge">Legado</div>
+      <div class="cable-name">Cat5e</div>
+      <p class="cable-spec">1 Gbps · 100 MHz · UTP · Solução econômica para redes de menor exigência e retrofit de ambientes existentes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTES -->
+<section class="clients">
+  <p class="clients-title">Empresas que confiam em nosso trabalho</p>
+  <div class="logos-row">
+    <div class="logo-item">TECHCORP</div>
+    <div class="logo-item">GRUPO RIO</div>
+    <div class="logo-item">DATASUL</div>
+    <div class="logo-item">NETSYNC</div>
+    <div class="logo-item">INFRALAB</div>
+    <div class="logo-item">CONECTA</div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="testimonials">
+  <div class="section-tag">Clientes</div>
+  <h2 class="section-title">O que dizem sobre nós</h2>
+  <div class="testimonials-grid">
+    <div class="testimonial">
+      <p class="testimonial-text">A CaboTech reorganizou toda a nossa infraestrutura de rede em 3 dias sem interromper o funcionamento. O resultado foi impressionante — velocidade triplicou e as quedas pararam completamente.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">RF</div>
+        <div>
+          <div class="author-name">Ricardo Fontes</div>
+          <div class="author-role">CTO — TechCorp Brasil</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <p class="testimonial-text">Documentação técnica impecável, cada ponto certificado e entregue com relatório Fluke. Facilita muito a gestão da rede. Recomendo sem hesitar para qualquer empresa.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">AM</div>
+        <div>
+          <div class="author-name">Ana Mendes</div>
+          <div class="author-role">Gerente de TI — Grupo Rio</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <p class="testimonial-text">Contratamos para o nosso novo data center e o trabalho foi executado com altíssimo padrão. Prazo cumprido, zero retrabalho e suporte pós-entrega excelente.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">PL</div>
+        <div>
+          <div class="author-name">Pedro Lima</div>
+          <div class="author-role">Diretor — DataSul Soluções</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<div class="cta-band">
+  <h2 class="cta-band-title">Pronto para uma rede que funciona de verdade?</h2>
+  <p class="cta-band-desc">Solicite uma visita técnica gratuita e receba uma proposta detalhada em até 24 horas.</p>
+  <a href="#contato" class="btn-dark">Falar com um Especialista</a>
+</div>
+
+<!-- CONTATO -->
+<section id="contato" class="contact">
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="section-tag">Fale conosco</div>
+      <h2 class="section-title">Entre em Contato</h2>
+      <p class="section-desc" style="margin-bottom: 2.5rem;">Nossa equipe técnica está pronta para analisar seu projeto e apresentar a melhor solução.</p>
+      <div class="contact-detail">
+        <svg class="contact-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 2C7.23 2 5 4.23 5 7C5 10.25 10 17 10 17C10 17 15 10.25 15 7C15 4.23 12.77 2 10 2ZM10 9C8.9 9 8 8.1 8 7C8 5.9 8.9 5 10 5C11.1 5 12 5.9 12 7C12 8.1 11.1 9 10 9Z" fill="currentColor"/>
+        </svg>
+        <div>
+          <div class="contact-label">Endereço</div>
+          <div class="contact-value">Av. Tecnológica, 1234 — Sala 801<br>Porto Alegre, RS — CEP 90000-000</div>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <svg class="contact-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M4 4H16C17.1 4 18 4.9 18 6V14C18 15.1 17.1 16 16 16H4C2.9 16 2 15.1 2 14V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M2 6L10 11L18 6" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        <div>
+          <div class="contact-label">E-mail</div>
+          <div class="contact-value">contato@cabotech.com.br<br>comercial@cabotech.com.br</div>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <svg class="contact-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M6.6 8.8C7.4 10.4 8.7 11.6 10.2 12.4L11.4 11.2C11.6 11 11.9 11 12.1 11.1C12.8 11.4 13.6 11.5 14.5 11.5C14.8 11.5 15 11.7 15 12V14.5C15 14.8 14.8 15 14.5 15C8.1 15 3 9.9 3 3.5C3 3.2 3.2 3 3.5 3H6C6.3 3 6.5 3.2 6.5 3.5C6.5 4.4 6.6 5.2 6.9 5.9C7 6.1 6.9 6.4 6.8 6.6L5.6 7.8C5.8 8.2 6.2 8.5 6.6 8.8Z" fill="currentColor"/>
+        </svg>
+        <div>
+          <div class="contact-label">Telefone / WhatsApp</div>
+          <div class="contact-value">(51) 98765-4321<br>(51) 3456-7890</div>
+        </div>
+      </div>
+      <div class="contact-detail" style="border:none">
+        <svg class="contact-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M10 6V10L13 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <div class="contact-label">Horário de Atendimento</div>
+          <div class="contact-value">Segunda a Sexta: 8h às 18h<br>Sábado: 8h às 12h</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="form-group form-row">
+        <div>
+          <label for="nome">Nome completo</label>
+          <input type="text" id="nome" placeholder="Seu nome">
+        </div>
+        <div>
+          <label for="empresa">Empresa</label>
+          <input type="text" id="empresa" placeholder="Nome da empresa">
+        </div>
+      </div>
+      <div class="form-group form-row">
+        <div>
+          <label for="email">E-mail</label>
+          <input type="email" id="email" placeholder="seu@email.com">
+        </div>
+        <div>
+          <label for="telefone">Telefone</label>
+          <input type="tel" id="telefone" placeholder="(00) 00000-0000">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="servico">Serviço de interesse</label>
+        <select id="servico">
+          <option value="">Selecione o serviço</option>
+          <option>Cabeamento Estruturado Cat6A</option>
+          <option>Fibra Óptica</option>
+          <option>Certificação e Testes</option>
+          <option>Projeto Executivo</option>
+          <option>Organização de DG/Rack</option>
+          <option>Manutenção e Suporte</option>
+          <option>Outro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="mensagem">Descreva o projeto</label>
+        <textarea id="mensagem" placeholder="Conte-nos sobre seu ambiente, número de pontos, área em m², necessidades específicas..."></textarea>
+      </div>
+      <button class="btn-primary" style="width:100%; border:none; font-family:'DM Sans',sans-serif; font-size:0.85rem; padding:1rem; cursor:none;" onclick="this.textContent='✓ Mensagem Enviada!'; this.style.background='#2d6a4f'">
+        Enviar Mensagem
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">Cabo<span>Tech</span></div>
+      <p class="footer-desc">Especialistas em cabeamento estruturado e infraestrutura de redes. Qualidade, prazo e conformidade técnica em cada projeto.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Serviços</div>
+      <ul class="footer-links">
+        <li><a href="#">Cabeamento Cat6A</a></li>
+        <li><a href="#">Fibra Óptica</a></li>
+        <li><a href="#">Certificação Fluke</a></li>
+        <li><a href="#">Projeto Executivo</a></li>
+        <li><a href="#">Manutenção</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Empresa</div>
+      <ul class="footer-links">
+        <li><a href="#">Sobre nós</a></li>
+        <li><a href="#">Nossa equipe</a></li>
+        <li><a href="#">Portfólio</a></li>
+        <li><a href="#">Blog técnico</a></li>
+        <li><a href="#">Trabalhe conosco</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Normas</div>
+      <ul class="footer-links">
+        <li><a href="#">ABNT NBR 14565</a></li>
+        <li><a href="#">ANSI/TIA 568</a></li>
+        <li><a href="#">ISO/IEC 11801</a></li>
+        <li><a href="#">IEEE 802.3</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 CaboTech. Todos os direitos reservados.</div>
+    <div class="social-links">
+      <a href="#" class="social-link">in</a>
+      <a href="#" class="social-link">ig</a>
+      <a href="#" class="social-link">wpp</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button, input, textarea, select').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '20px';
+      cursor.style.height = '20px';
+      ring.style.width = '56px';
+      ring.style.height = '56px';
+      ring.style.borderColor = 'rgba(245,166,35,0.8)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '12px';
+      cursor.style.height = '12px';
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+      ring.style.borderColor = 'rgba(245,166,35,0.4)';
+    });
+  });
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.service-card, .cable-card, .testimonial, .step').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+
+  // Active nav
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    nav.style.borderBottomColor = window.scrollY > 50 ? 'rgba(245,166,35,0.2)' : 'var(--border)';
+  });
+</script>
+</body>
+</html>
